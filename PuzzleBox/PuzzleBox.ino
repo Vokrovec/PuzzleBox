@@ -26,7 +26,7 @@ vec2 position;
 // 20x20 Game Map (0 = Wall, 1 = Open Space)
 char gameMap[WIDTH][HEIGHT] = {
   {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
-  {0,1,2,1,1,0,1,1,1,1,1,1,1,1,1,2,1,1,4,0},
+  {0,1,2,1,1,0,1,1,1,3,1,1,1,1,1,2,1,1,4,0},
   {0,1,0,0,1,0,1,0,0,0,0,0,0,1,0,0,0,0,1,0},
   {0,1,0,1,1,1,3,1,1,1,1,1,0,1,0,1,1,1,1,0},
   {0,4,0,1,0,0,0,0,0,1,0,1,0,1,0,1,0,0,1,0},
@@ -34,13 +34,13 @@ char gameMap[WIDTH][HEIGHT] = {
   {0,0,0,1,0,1,0,1,0,1,0,0,0,0,0,1,0,1,0,0},
   {0,1,4,1,1,1,0,1,1,1,1,1,1,3,1,1,1,1,1,0},
   {0,1,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,1,0},
-  {0,1,3,1,2,1,1,1,1,0,1,0,1,1,4,1,1,3,1,0},
+  {0,1,3,1,2,4,1,1,1,0,1,0,1,1,4,1,1,3,1,0},
   {0,1,0,0,0,0,1,0,2,0,1,0,1,0,0,0,0,0,1,0},
   {0,1,1,1,1,0,1,0,1,1,4,1,1,0,1,1,4,1,1,0},
   {0,0,0,0,1,0,1,0,0,0,0,0,0,0,1,0,0,0,0,0},
   {0,1,2,1,1,0,1,1,1,1,1,1,1,2,1,1,4,1,1,0},
   {0,1,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,1,0},
-  {0,1,1,1,1,1,1,1,0,1,0,1,1,1,1,1,1,1,1,0},
+  {0,1,1,3,1,2,1,1,0,1,0,1,1,1,1,1,1,1,1,0},
   {0,1,0,0,0,0,0,1,0,1,0,1,0,0,0,0,0,0,1,0},
   {0,3,0,1,2,1,0,1,1,1,1,1,0,1,1,1,1,0,1,0},
   {0,1,1,1,0,1,1,4,0,0,0,1,1,1,0,1,1,1,4,0},
@@ -138,14 +138,12 @@ void adjustPosition(vec2 direction) {
   if (validatePosition(new_position)) position = new_position;
   do {
     print_position();
-    delay(100);
     isTeleported = false;
     if (gameMap[position.x][position.y] == curr_state) {
       curr_state += 1;
       if (curr_state == 5) curr_state = 2;
       points++;
       print_points();
-      delay(100);
     }
     if (gameMap[position.x][position.y] == PORTAL) {
       print_position();
@@ -158,7 +156,7 @@ void adjustPosition(vec2 direction) {
 }
 
 void detect_buttons() {
-  if (millis() - lastPressed < 200) return;
+  if (millis() - lastPressed < 150) return;
   int currentButtonUPState = digitalRead(BUTTON_UP);
   int currentButtonDOWNState = digitalRead(BUTTON_DOWN);
   int currentButtonLEFTState = digitalRead(BUTTON_LEFT);
@@ -207,7 +205,7 @@ void winnerScreen() {
 void loop() {
 
   if (millis() - lastPrinted > 100) {
-    if (points >= 10000) winnerScreen();
+    if (points >= 1000) winnerScreen();
     lastPrinted = millis();
     print_position();
     print_time();
